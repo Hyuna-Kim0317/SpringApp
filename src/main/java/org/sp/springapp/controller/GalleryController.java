@@ -10,6 +10,7 @@ import org.sp.springapp.domain.Gallery;
 import org.sp.springapp.domain.GalleryImg;
 import org.sp.springapp.model.gallery.GalleryDAO;
 import org.sp.springapp.model.gallery.GalleryImgDAO;
+import org.sp.springapp.model.gallery.GalleryService;
 import org.sp.springapp.util.FileManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,12 +23,12 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class GalleryController {
 	
-	//DI를 이용하여, 느슨하게 보유해야 한다
+	//컨트롤러가 직접 DAO를 다루게 되면, 트랜잭션 처리까지 부담한다거나,
+	//모델 part 업무를 너무 전문적으로 처리하게 된다...
+	//컨트롤러와 모델의 업무 경계가 모호해 지므로, 즉 코드의 분리가 안되므로 추후 비슷한 업무시
+	//코드를 분리해 놓지 않았기 때문에 코드의 재사용성이 떨어진다..
 	@Autowired
-	private GalleryDAO galleryDAO;
-	
-	@Autowired
-	private GalleryImgDAO galleryImgDAO;
+	private GalleryService galleryService;
 	
 	@Autowired
 	private FileManager fileManager;
@@ -39,7 +40,6 @@ public class GalleryController {
 		
 		//4단계 : 목록 저장
 		ModelAndView mav = new ModelAndView("gallery/list");
-		
 		return mav;
 	}
 
@@ -63,33 +63,23 @@ public class GalleryController {
 		String path=context.getRealPath("/resources/data/");
 		System.out.println("파일이 저장될 풀 경로는 "+path);
 		
-		List<String> nameList = new ArrayList<String>();	//새롭게 생성한 파일명이 누적될 곳
+		List<GalleryImg> imgList = new ArrayList<GalleryImg>();	//새롭게 생성한 파일명이 누적될 곳
 		
 		for(int i=0;i<photo.length; i++) {
 			String filename=photo[i].getOriginalFilename();
 			String name=fileManager.save(path, filename, photo[i]);
-			nameList.add(name);	//새로운 이름을 리스트에 적재
+			
+			GalleryImg galleryImg = new GalleryImg();	//empty
+			galleryImg.setGallery(gallery);	//이 시점의 gallery DTO에는 아직 gallery_idx는 0인상태
+			galleryImg.setFilename(filename);
+			imgList.add(galleryImg);
 		}
 		
-		//Gallery 테이블 insert
-		//여기까지는 아직 gallery DTO의 gallery_idx가 채워지지 않은 0인 상태..
-		System.out.println("DAO 동작 전 gallery_idx is "+ gallery.getGallery_idx());
+		//Gallery DTO에 GalleryImg 들을 생성하여 List로 넣어두기
+		gallery.setGalleryImgList(imgList);
 		
-		galleryDAO.insert(gallery);
+		galleryService.regist(gallery);	//글 등록 요청
 		
-		//여기부터는 gallery DTO의 gallery_idx는 가장 최신의 sequence 값으로 채워져 있는 상태
-		System.out.println("DAO 동작 전 gallery_idx is "+ gallery.getGallery_idx());
-		
-		
-		//GalleryImg 테이블에 insert
-		//업로드한 이미지 수만큼 insert!!
-		for(String name : nameList) {
-		GalleryImg galleryImg=new GalleryImg();
-		galleryImg.setGallery(gallery);	//부모의 pk 담기
-		galleryImg.setFilename(name);	//이미지명
-		
-		galleryImgDAO.insert(galleryImg);
-		}
 		return null;
 	}
 }
