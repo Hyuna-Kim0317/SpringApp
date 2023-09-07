@@ -50,9 +50,11 @@ $(function(){
 			<th>등록일</th>
 			<th>조회수</th>
 		</tr>
+		<%int num=pager.getNum(); %>
 		<%for(int i=1; i<=pager.getPageSize();i++){ %>
+		<%if(num<1)break; %>
 		<tr>
-			<td>Jill</td>
+			<td><%=num-- %></td>
 			<td>Jill</td>
 			<td>Jill</td>
 			<td>Smith</td>

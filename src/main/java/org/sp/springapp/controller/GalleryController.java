@@ -44,7 +44,7 @@ public class GalleryController {
 	public ModelAndView getList(HttpServletRequest request) {
 		//3단계 : 일 시키기
 		List list = new ArrayList();
-		for(int i=0;i<926;i++) {
+		for(int i=0;i<26;i++) {
 			list.add("");
 		}
 		//4단계 : 목록 저장
