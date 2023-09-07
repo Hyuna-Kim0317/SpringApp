@@ -37,7 +37,7 @@ public class GalleryServiceImpl implements GalleryService{
 
 	@Override
 	public List selectAll() {
-		return null;
+		return galleryDAO.selectAll();
 	}
 
 	@Override

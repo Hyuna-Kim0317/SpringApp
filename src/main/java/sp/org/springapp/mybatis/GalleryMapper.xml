@@ -11,5 +11,26 @@
 			select seq_gallery.currval as gallery_idx from dual
 		</selectKey>
 	</insert>
+	
+	<!-- 모든 게시물 가져오기 
+		릴레이션 상 자식인 GalleryImg 테이블의 레코드도 함께 가져오려면, 자동매핑으로는 해결이 안됨
+		따라서 resultMap 이용하여 수동으로 매핑해보자-->
+	<resultMap type="Gallery" id="galleryMap">
+		<id column="gallery_idx" property="gallery_idx"/>
+		<result column="title" property="title"/>
+		<result column="writer" property="writer"/>
+		<result column="regdate" property="regdate"/>
+		<result column="hit" property="hit"/>
+		<result column="content" property="content"/>
+		
+		<collection column="gallery_idx" property="galleryImgList" javaType="java.util.List"
+			ofType="GalleryImg" select="GalleryImg.selectByGalleryIdx"/>
+	
+	</resultMap>
+	<select id="selectAll" resultMap="galleryMap">
+		select gallery_idx, title, writer, regdate, hit, content 
+		from gallery order by 
+		gallery_idx desc
+	</select>
  
 </mapper>

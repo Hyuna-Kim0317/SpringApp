@@ -36,7 +36,11 @@ public class MybatisGalleryDAO implements GalleryDAO{
 
 	@Override
 	public List selectAll() {
-		return null;
+		SqlSession sqlSession = mybatisConfig.getSqlSession();
+		List list=sqlSession.selectList("Gallery.selectAll");
+		mybatisConfig.release(sqlSession);
+		
+		return list;
 	}
 
 	@Override

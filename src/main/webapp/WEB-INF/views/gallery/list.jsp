@@ -1,7 +1,11 @@
+<%@page import="java.util.List"%>
+<%@page import="org.sp.springapp.domain.GalleryImg"%>
+<%@page import="org.sp.springapp.domain.Gallery"%>
 <%@page import="org.sp.springapp.util.Pager"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
 	Pager pager=(Pager)request.getAttribute("pager");
+	List<Gallery> galleryList = (List)request.getAttribute("galleryList");
 %>
 <!DOCTYPE html>
 <html>
@@ -51,11 +55,15 @@ $(function(){
 			<th>조회수</th>
 		</tr>
 		<%int num=pager.getNum(); %>
+		<%int curPos=pager.getCurPos();	//페이지당 List의 시작 index %>
+		<%=curPos %>
 		<%for(int i=1; i<=pager.getPageSize();i++){ %>
 		<%if(num<1)break; %>
+		<%Gallery gallery=galleryList.get(curPos++); %>
+		<%GalleryImg galleryImg=gallery.getGalleryImgList().get(0); %>
 		<tr>
 			<td><%=num-- %></td>
-			<td>Jill</td>
+			<td><img src="/static/data/<%=galleryImg.getFilename() %>" width="35px"></td>
 			<td>Jill</td>
 			<td>Smith</td>
 			<td>Smith</td>
