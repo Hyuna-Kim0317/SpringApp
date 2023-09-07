@@ -1,4 +1,9 @@
+<%@page import="org.sp.springapp.domain.GalleryImg"%>
+<%@page import="org.sp.springapp.domain.Gallery"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	Gallery gallery = (Gallery)request.getAttribute("gallery");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,14 +69,23 @@ $(function(){
 </head>
 <body>
 
-	<h3>Contact Form</h3>
+	<h3>상세보기</h3>
 
 	<div class="container">
 		<form>
-			<input type="text" name="title" placeholder="제목..."> 
-			<input type="text" name="writer" placeholder="작성자...">
-			<textarea id="content" name="content" placeholder="Write something.."
-				style="height: 200px"></textarea>
+			<input type="text" name="title" value="<%=gallery.getTitle()%>"> 
+			<input type="text" name="writer" value="<%=gallery.getWriter()%>">
+			<textarea id="content" name="content" style="height: 200px"><%=gallery.getContent() %></textarea>
+			<%for(int i=0;i<gallery.getGalleryImgList().size();i++){ %>
+			<%GalleryImg galleryImg=gallery.getGalleryImgList().get(i); %>
+				<p>
+					<img src="/static/data/<%=galleryImg.getFilename()%>" width="150px">
+				</p>
+			<%} %>
+			
+			
+			
+			
 			<input type="file" name="photo">
 			<br>
 			<input type="file" name="photo">

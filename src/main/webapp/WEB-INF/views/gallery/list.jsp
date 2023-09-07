@@ -64,7 +64,7 @@ $(function(){
 		<tr>
 			<td><%=num-- %></td>
 			<td><img src="/static/data/<%=galleryImg.getFilename() %>" width="35px"></td>
-			<td><%=gallery.getTitle() %></td>
+			<td><a href="/gallery/content?gallery_idx=<%=gallery.getGallery_idx()%>"><%=gallery.getTitle() %></a></td>
 			<td><%=gallery.getWriter() %></td>
 			<td><%=gallery.getRegdate() %></td>
 			<td><%=gallery.getHit() %></td>

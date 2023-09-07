@@ -42,7 +42,7 @@ public class GalleryServiceImpl implements GalleryService{
 
 	@Override
 	public Gallery select(int gallery_idx) {
-		return null;
+		return galleryDAO.select(gallery_idx);
 	}
 
 	@Override

@@ -27,10 +27,20 @@
 			ofType="GalleryImg" select="GalleryImg.selectByGalleryIdx"/>
 	
 	</resultMap>
+	
+	<!-- 게시물 목록 가져오기 -->
+	<sql id="selectSql">
+		select gallery_idx, title, writer, regdate, hit, content from gallery	
+	</sql>
 	<select id="selectAll" resultMap="galleryMap">
-		select gallery_idx, title, writer, regdate, hit, content 
-		from gallery order by 
-		gallery_idx desc
+		<include refid="selectSql"/>
+		order by gallery_idx desc
+	</select>
+	
+	<!-- 게시물 한건 가져오기 -->
+	<select id="select" resultMap="galleryMap" parameterType="int">
+		<include refid="selectSql"/>
+		where gallery_idx=#{gallery_idx}
 	</select>
  
 </mapper>
