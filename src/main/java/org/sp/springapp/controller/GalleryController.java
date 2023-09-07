@@ -13,6 +13,7 @@ import org.sp.springapp.exception.GalleryException;
 import org.sp.springapp.exception.GalleryImgException;
 import org.sp.springapp.model.gallery.GalleryService;
 import org.sp.springapp.util.FileManager;
+import org.sp.springapp.util.Pager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,13 +36,23 @@ public class GalleryController {
 	@Autowired
 	private FileManager fileManager;
 	
+	@Autowired
+	private Pager pager;
+	
 	//게시판 목록 요청  처리
 	@RequestMapping(value="/gallery/list",method=RequestMethod.GET)
-	public ModelAndView getList() {
+	public ModelAndView getList(HttpServletRequest request) {
 		//3단계 : 일 시키기
-		
+		List list = new ArrayList();
+		for(int i=0;i<926;i++) {
+			list.add("");
+		}
 		//4단계 : 목록 저장
+		pager.init(list, request);
+		
 		ModelAndView mav = new ModelAndView("gallery/list");
+		mav.addObject("pager",pager);	//저장했다는 것은 포워딩이 필요하다는 것임
+		
 		return mav;
 	}
 
