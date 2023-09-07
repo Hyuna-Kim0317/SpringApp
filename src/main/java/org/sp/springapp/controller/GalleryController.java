@@ -51,9 +51,10 @@ public class GalleryController {
 		return "gallery/regist";
 	}
 	
+	
 	//글쓰기 요청 처리
 	@RequestMapping(value="/gallery/regist", method=RequestMethod.POST)
-	public ModelAndView regist(Gallery gallery, HttpServletRequest request) {
+	public String regist(Gallery gallery, HttpServletRequest request) {
 		//3단계 : 오라클에 글등록 + 파일 업로드 + 
 		
 		MultipartFile[] photo = gallery.getPhoto();
@@ -84,7 +85,7 @@ public class GalleryController {
 		//이때 이 이벤트를 처리할 수 있는 메서드를 정의해놓고 개발자가 알맞는 에러 페이지 및 메시지를 구성
 		galleryService.regist(gallery);	//글 등록 요청
 		
-		return null;
+		return "redirect:/gallery/list";	//형님인 DispatcherServlet이 ViewResolver를 이용하여, 이 몸뚱아리를 해석..
 	}
 	
 	//어떠한 예외가 발생했을 때, 어떤 처리를 할 지 아래의 메서드에서 로직 작성..
