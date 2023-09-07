@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.sp.springapp.domain.Gallery;
 import org.sp.springapp.domain.GalleryImg;
+import org.sp.springapp.exception.GalleryException;
+import org.sp.springapp.exception.GalleryImgException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +21,9 @@ public class GalleryServiceImpl implements GalleryService{
 	@Autowired
 	private GalleryImgDAO galleryImgDAO;
 
-	@Override
-	public void regist(Gallery gallery) {
+	//DAO로부터 전달받은 예외 객체는, 서비스가 방치하지 말고, Controller까지 전달을 해줘야
+	//웹 브라우정니 클라이언트에게 적절한 에러 화면을 제공할 수 있다..
+	public void regist(Gallery gallery) throws GalleryException, GalleryImgException{
 		//두 개의 dao를 이용하여 글 등록 업무 처리..
 		galleryDAO.insert(gallery);	//mybatis에 의해 gallery_idx
 		
@@ -30,7 +33,6 @@ public class GalleryServiceImpl implements GalleryService{
 			GalleryImg galleryImg=imgList.get(i);
 			galleryImgDAO.insert(galleryImg);	//이미지 테이블에 insert
 		}
-		
 	}
 
 	@Override

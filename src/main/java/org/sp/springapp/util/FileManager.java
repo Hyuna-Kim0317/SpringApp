@@ -3,6 +3,7 @@ package org.sp.springapp.util;
 import java.io.File;
 import java.io.IOException;
 
+import org.sp.springapp.exception.FileException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +25,7 @@ public class FileManager {
 	}
 	
 	//파일 저장
-	public String save(String path, String filename, MultipartFile mf) {
+	public String save(String path, String filename, MultipartFile mf) throws FileException{
 
 		System.out.println(filename);
 		
@@ -35,11 +36,13 @@ public class FileManager {
 		
 		try {
 			mf.transferTo(file);
+			//new IOException();	//테스트 목적으로 일부러..
 		} catch (IllegalStateException e) {
-			e.printStackTrace();
+			throw new FileException("파일저장 실패", e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new FileException("파일저장 실패", e);
 		}
+		
 		return newName;
 	}
 }
