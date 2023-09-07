@@ -64,10 +64,10 @@ $(function(){
 		<tr>
 			<td><%=num-- %></td>
 			<td><img src="/static/data/<%=galleryImg.getFilename() %>" width="35px"></td>
-			<td>Jill</td>
-			<td>Smith</td>
-			<td>Smith</td>
-			<td>50</td>
+			<td><%=gallery.getTitle() %></td>
+			<td><%=gallery.getWriter() %></td>
+			<td><%=gallery.getRegdate() %></td>
+			<td><%=gallery.getHit() %></td>
 		</tr>
 		<%} %>
 		<tr>
